@@ -1,8 +1,9 @@
 import React from '@react';
+import './index.less';
 
 class PlayListComponent extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
     }
 
     render() {
@@ -33,7 +34,7 @@ class PlayListComponent extends React.Component {
                                             <div class="flexleft flexnum ">
                                                 {re.id === this.props.curplay ? (
                                                     <image src="../../aseets/image/aal.png" style={{ width: '36rpx' }}>
-                            image
+                                                        image
                                                     </image>
                                                 ) : (
                                                     <div>
