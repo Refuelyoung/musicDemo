@@ -1,4 +1,4 @@
-import React from '../../ReactWX.js';
+import React from '../../ReactBu.js';
 import url from '../../utils/bsurl';
 let bsurl = url.bsurl;
 import common from '../../utils/util';
