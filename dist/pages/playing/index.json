@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "anu-loading": "/components/Loading/index",
+        "anu-lrc": "/components/Lrc/index"
+    }
+}

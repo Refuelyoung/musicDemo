@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "anu-playlistcomponent": "/components/PlayListComponent/index",
+        "anu-loading": "/components/Loading/index"
+    }
+}

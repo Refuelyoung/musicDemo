@@ -1,0 +1,1 @@
+<view class="cntloading">{{props.text || '加载中...'}}<view><text class="cl1" /><text class="cl2" /><text class="cl3" /></view></view>

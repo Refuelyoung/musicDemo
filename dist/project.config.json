@@ -1,0 +1,12 @@
+{
+	"appid": "wx32988fdf6b814567",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"projectname": "music_demo",
+	"condition": {}
+}
