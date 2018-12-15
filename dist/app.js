@@ -1,4 +1,4 @@
-import React from './ReactBu.js';
+import React from './ReactWX.js';
 
 import url from './utils/bsurl';
 let bsurl = url.bsurl;
@@ -23,7 +23,7 @@ function Demo() {
         staredlist: [],
         cookie: '',
         user: {},
-        buildType: 'bu'
+        buildType: 'wx'
     };
 }
 

@@ -1,5 +1,6 @@
 /**
- * 运行于支付宝小程序的React by 司徒正美 Copyright 2018-12-14T08
+ * 运行于微信小程序的React by 司徒正美 Copyright 2018-12-14T08
+ * IE9+
  */
 
 var arrayPush = Array.prototype.push;
@@ -879,31 +880,6 @@ function injectAPIs(ReactWX, facade, override) {
     ReactWX.initPxTransform = initPxTransform.bind(ReactWX)();
     ReactWX.pxTransform = pxTransform.bind(ReactWX);
 }
-
-var buApis = function buApis(api) {
-    return {
-        showActionSheet: function _(a) {
-            var success = a['success'],
-                complete = a['complete'];
-            a['success'] = function (res) {
-                success && success({ index: res.tapIndex });
-            };
-            a['complete'] = function (res) {
-                complete && complete({ index: res.tapIndex });
-            };
-            return api.showActionSheet.apply(api, arguments);
-        },
-        connectSocket: function _(a) {
-            a.protocolsArray = a.protocols;
-            return api.connectSocket.apply(api, arguments);
-        },
-        showLoading: function _(a) {
-            a = a || {};
-            a.title = a.title || '加载中...';
-            return api.showLoading(a);
-        }
-    };
-};
 
 var fakeApp = {
     app: {
@@ -2380,42 +2356,6 @@ function toStyle(obj, props, key) {
     return obj;
 }
 
-function registerComponent(type, name) {
-    registeredComponents[name] = type;
-    var reactInstances = type.reactInstances = [];
-    var wxInstances = type.wxInstances = {};
-    return {
-        data: {
-            props: {},
-            state: {},
-            context: {}
-        },
-        attached: function attached() {
-            usingComponents[name] = type;
-            var uuid = this.dataset.instanceUid || null;
-            for (var i = 0; i < reactInstances.length; i++) {
-                var reactInstance = reactInstances[i];
-                if (reactInstance.instanceUid === uuid) {
-                    reactInstance.wx = this;
-                    this.reactInstance = reactInstance;
-                    updateMiniApp(reactInstance);
-                    return reactInstances.splice(i, 1);
-                }
-            }
-            wxInstances[uuid] = this;
-        },
-        detached: function detached() {
-            var t = this.reactInstance;
-            if (t) {
-                t.wx = null;
-                this.reactInstance = null;
-            }
-            console.log('detached ' + name + ' \u7EC4\u4EF6');
-        },
-        dispatchEvent: dispatchEvent
-    };
-}
-
 function onLoad(PageClass, path, query) {
     var app = _getApp();
     app.$$pageIsReady = false;
@@ -2538,15 +2478,56 @@ function registerPage(PageClass, path, testObject) {
     return config;
 }
 
+function registerComponent(type, name) {
+    registeredComponents[name] = type;
+    var reactInstances = type.reactInstances = [];
+    var wxInstances = type.wxInstances = {};
+    var config = {
+        data: {
+            props: {},
+            state: {},
+            context: {}
+        },
+        lifetimes: {
+            attached: function attached() {
+                usingComponents[name] = type;
+                var uuid = this.dataset.instanceUid || null;
+                for (var i = 0; i < reactInstances.length; i++) {
+                    var reactInstance = reactInstances[i];
+                    if (reactInstance.instanceUid === uuid) {
+                        reactInstance.wx = this;
+                        this.reactInstance = reactInstance;
+                        updateMiniApp(reactInstance);
+                        return reactInstances.splice(i, 1);
+                    }
+                }
+                wxInstances[uuid] = this;
+            },
+            detached: function detached() {
+                var t = this.reactInstance;
+                if (t) {
+                    t.wx = null;
+                    this.reactInstance = null;
+                }
+                console.log('detached ' + name + ' \u7EC4\u4EF6');
+            }
+        },
+        methods: {
+            dispatchEvent: dispatchEvent
+        }
+    };
+    Object.assign(config, config.lifetimes);
+    return config;
+}
+
 var render$1 = Renderer$1.render;
 var React = getWindow().React = {
     eventSystem: {
         dispatchEvent: dispatchEvent
     },
     findDOMNode: function findDOMNode() {
-        console.log("小程序不支持findDOMNode");
+        console.log('小程序不支持findDOMNode');
     },
-    version: '1.4.8',
     render: render$1,
     hydrate: render$1,
     webview: webview,
@@ -2569,13 +2550,16 @@ var React = getWindow().React = {
     getApp: _getApp,
     registerPage: registerPage,
     toStyle: toStyle,
-    appType: 'bu'
+    appType: 'wx'
 };
 var apiContainer = {};
-if (typeof swan != 'undefined') {
-    apiContainer = swan;
+if (typeof wx != 'undefined') {
+    apiContainer = wx;
+} else if (typeof tt != 'undefined') {
+    apiContainer = tt;
+    React.appType = 'tt';
 }
-injectAPIs(React, apiContainer, buApis);
+injectAPIs(React, apiContainer);
 
 export default React;
 export { Children, createElement, Component };

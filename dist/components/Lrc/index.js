@@ -1,4 +1,4 @@
-import React from '../../ReactBu.js';
+import React from '../../ReactWX.js';
 
 function Lrc() {}
 

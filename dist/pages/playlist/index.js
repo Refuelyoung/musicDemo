@@ -1,4 +1,4 @@
-import React from '../../ReactBu.js';
+import React from '../../ReactWX.js';
 import url from '../../utils/bsurl';
 let bsurl = url.bsurl;
 import id2Url from '../../utils/base64md5';
