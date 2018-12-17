@@ -1,7 +1,0 @@
-{
-    "navigationBarTitleText": "发现音乐",
-    "usingComponents": {
-        "anu-loading": "/components/Loading/index",
-        "anu-catemodal": "/components/CateModal/index"
-    }
-}
